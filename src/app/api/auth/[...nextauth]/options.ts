@@ -7,7 +7,7 @@ import UserModel from "@/model/User";
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
-            id: "credential",
+            id: "credentials",
             name: "Credentials",
 
             credentials: {
@@ -15,7 +15,7 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" }
             },
 
-            async authorize(credentials: any, req): Promise<any>{
+            async authorize(credentials: any): Promise<any>{
                 await dbConnect()
                 try {
                     const user = await UserModel.findOne({
