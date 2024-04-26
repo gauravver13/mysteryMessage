@@ -10,7 +10,7 @@ import { useRouter } from "next/router"
 import { signUpSchema } from "@/schema/signUpSchema"
 import axios,{ AxiosError } from "axios";
 import { ApiResponse } from "@/types/ApiResponse"
-import { useDebounce } from 'use-debounce';
+import { useDebouncedValue } from '@mantine/hooks';
 
 const page = () => {
   const [username, setUsername] = useState('')
@@ -18,7 +18,7 @@ const page = () => {
   const [isCheckingUsername, setIsCheckingUsername] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   
-  const debouncedUsername = useDebounce(username, 300)      // check for useDebounceValue;
+  const debouncedUsername = useDebouncedValue(username, 300)      // check for useDebounceValue;
   const { toast } = useToast()
   const router = useRouter();
   
