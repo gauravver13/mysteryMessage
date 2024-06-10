@@ -11,6 +11,11 @@ import { signUpSchema } from "@/schema/signUpSchema"
 import axios,{ AxiosError } from "axios";
 import { ApiResponse } from "@/types/ApiResponse"
 import { useDebouncedValue } from '@mantine/hooks';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Loader2 } from "lucide-react"
+
 
 const page = () => {
   const [username, setUsername] = useState('')
@@ -41,7 +46,7 @@ const page = () => {
           const response = await axios.get(`/api/check-username-unique? username=${debouncedUsername}`)
           setUsernameMessage(response.data.message)
         } catch (error) {
-          const axiosError = error as  AxiosError<ApiResponse>;
+          const axiosError = error as AxiosError<ApiResponse>;
           setUsernameMessage(
             axiosError.response?.data.message ?? "Error checking username"
           )
@@ -53,9 +58,12 @@ const page = () => {
     checkUsernameUnique()
   }, [debouncedUsername])
 
+
   const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
     setIsSubmitting(true)
     try {
+      console.log(data);
+      
       const response = await axios.post<ApiResponse>('/api/sign-up', data)
       toast({
         title: 'Success',
@@ -65,6 +73,7 @@ const page = () => {
       setIsSubmitting(false)
     } catch (error) {
       console.error("Error in signup of user", error)
+
       const axiosError = error as  AxiosError<ApiResponse>;
       let errorMessage = axiosError.response?.data.message
       toast({
@@ -72,14 +81,97 @@ const page = () => {
         description: errorMessage,
         variant: "destructive"
       })
-      setUsernameMessage(
-        axiosError.response?.data.message ?? "Error checking username"
-      )
+      setIsSubmitting(false)
+      // setUsernameMessage(
+      //   axiosError.response?.data.message ?? "Error checking username"
+      // )
     }
   }
 
   return (
-    <div>page</div>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+        <div className="text-center">
+        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
+          Join Mystery Message
+        </h1>
+        <p className="mb-4">Sign up to start your anonymous adventure</p>
+        </div>
+          <Form {...form}>
+            <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6">
+            <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="usernamae"
+                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    setUsername(e.target.value)
+                  }} 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+            <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>email</FormLabel>
+                <FormControl>
+                  <Input placeholder="email"
+                   {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+            <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="password"
+                   {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" disabled={isSubmitting}>
+            {
+              isSubmitting ? (
+                <>
+                  <Loader2  className="mr-2 h-4 animate-spin"/> Please wait
+                </>
+              ) : ( 'Signup' )
+            }
+          </Button>
+            </form>
+
+          </Form>
+          <div className="text-center mt-4">
+            <p>
+              Already a member? {''}
+              <Link href="/sign-in" className="text-blue-600 hover:text-blue-800">
+                Sign in
+              </Link>
+            </p>
+          </div>
+      </div>
+    </div>
   )
 }
 

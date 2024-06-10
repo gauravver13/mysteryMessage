@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import mongo, { Schema, Document } from "mongoose";
+import { Schema, Document } from "mongoose";
 
 export interface Message extends Document{
     content: string;
-    createdAt: Date
+    createdAt: Date;
 }
 
 const MessageSchema: Schema<Message> = new Schema({
@@ -17,7 +17,6 @@ const MessageSchema: Schema<Message> = new Schema({
         default: Date.now
     }
 })
-
 export interface User extends Document{
     username: string;
     email: string;
@@ -26,7 +25,7 @@ export interface User extends Document{
     verifyCodeExpiry: Date;
     isVerified: boolean;
     isAcceptingMessage: boolean; 
-    messages: Message[]
+    messages: Message[];
 }
 
 const UserSchema: Schema<User> = new Schema({
@@ -39,8 +38,9 @@ const UserSchema: Schema<User> = new Schema({
     email: {
         type: String,
         required: [true, "Email is required"],
-        unique: true ,
-        match: [/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g, 'please use a valid email address']   //RegEx
+        unique: true,
+        match: [/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g, 'please use a valid email address']   
+        //RegEx
     },
     password: {
         type: String,
