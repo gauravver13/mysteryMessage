@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 
+
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
@@ -20,8 +21,8 @@ export const authOptions: NextAuthOptions = {
                 try {
                     const user = await UserModel.findOne({
                         $or: [
-                            {email: credentials.identifier},
-                            {username: credentials.identifier}
+                            { email: credentials.identifier },
+                            { username: credentials.identifier }
                         ]
                     })
                     if(!user) {
@@ -31,6 +32,7 @@ export const authOptions: NextAuthOptions = {
                     if(!user.isVerified) {
                         throw new Error("Please verify(signup) your account before login")
                     }
+
                     const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password)
 
                     if(isPasswordCorrect) {
@@ -38,8 +40,8 @@ export const authOptions: NextAuthOptions = {
                     } else {
                     throw new Error('Incorrect Password')
                     }
-                } catch (error: any) {
-                    throw new Error(error)
+                } catch (err: any) {
+                    throw new Error(err)
                 }
             }
         })
@@ -48,18 +50,19 @@ export const authOptions: NextAuthOptions = {
         async jwt({ token, user }) {
             if(user) {
                 token._id = user._id?.toString()
-                token.isAcceptingMessages = user.isAcceptingMessages
-                token.username = user.username
+                token.isVerified = user.isVerified;
+                token.isAcceptingMessages = user.isAcceptingMessages;
+                token.username = user.username;
             }
 
             return token
           },
         async session({ session, token }) {
             if(token) {
-                session.user._id = token._id
-                session.user.isVerified = token.isVerified 
-                session.user.isAcceptingMessages = token.isAcceptingMessages
-                session.user.username = token.username 
+                session.user._id = token._id;
+                session.user.isVerified = token.isVerified; 
+                session.user.isAcceptingMessages = token.isAcceptingMessages;
+                session.user.username = token.username; 
             }
             return session
           },
@@ -76,6 +79,9 @@ export const authOptions: NextAuthOptions = {
 }
 
 
+
+
+// TODO: Login with google and Github 
 
 
 
