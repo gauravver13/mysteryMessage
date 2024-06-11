@@ -25,13 +25,15 @@ export default function VerificationEmailProps({ username, otp }
                         fontFamily="Roboto"
                         fallbackFontFamily="Verdana"
                         webFont={{
-                            url: 'abc',
-                            format: 'woff2'
+                            url: "https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
+                            format: "woff2",
                         }}
                         fontWeight={400}
                         fontStyle='normal'
-                        />
-                        <Preview>Here&apos;s your Verification code: {otp}</Preview>;
+                    />
+                </Head>
+                        <Preview>Here&apos;s your Verification code: {otp}
+                        </Preview>;
                         <Section>
                             <Row>
                                 <Heading as="h2">Hello {username},</Heading>
@@ -45,8 +47,6 @@ export default function VerificationEmailProps({ username, otp }
                                 <Text>{otp}</Text>
                             </Row>
                         </Section>
-                </Head>
-                
             </Html>
         )
     }

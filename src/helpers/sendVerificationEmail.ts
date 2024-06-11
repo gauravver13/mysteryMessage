@@ -10,9 +10,9 @@ export async function sendVerificationEmail(
 ): Promise<ApiResponse>{
     try {
         await resend.emails.send({
-            from: 'onboarding@resend.dev',
+            from: 'resend-email-onboard.com',
             to: email,
-            subject: 'Mystery message | Verification',
+            subject: 'Mystery message | Verification code',
             react: VerificationEmail({username, otp: verifyCode}),
           });
         return {success: true, message: "verification email send successfully"}
@@ -21,4 +21,3 @@ export async function sendVerificationEmail(
         return {success: false, message: "Failed to send verification email"}
     }
 }
-
