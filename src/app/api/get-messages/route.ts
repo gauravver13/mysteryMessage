@@ -3,7 +3,7 @@ import { authOptions } from "../auth/[...nextauth]/options";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import { User } from "next-auth";
-import { isAsyncFunction } from "util/types";
+// import { isAsyncFunction } from "util/types";
 import mongoose from "mongoose";
 
 
@@ -23,6 +23,7 @@ export async function GET(request: Request) {
         )
     }
 
+    // mongoose object:
     const userId = new mongoose.Types.ObjectId(user._id);
 
     try {
@@ -30,7 +31,7 @@ export async function GET(request: Request) {
             { $match: {id: userId } },
             { $unwind: '$messages' },
             { $sort: {'messages.createdAt': -1 }},
-            { $group: {_id: '$id', messages: {$push: '$messages' }}}
+            { $group: {_id: '$id', messages: { $push: '$messages' }}}
         ])
 
         if(!user || user.length === 0) {
@@ -61,6 +62,4 @@ export async function GET(request: Request) {
             { status: 500 }
         )
     }
-
-    
 }
