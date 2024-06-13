@@ -28,6 +28,7 @@ export async function middleware(request: NextRequest) {
 }
 
 // See "Matching Paths" below to learn more
+// exactly where to run the middleware files 
 export const config = {
     matcher: [
         '/sign-in',
