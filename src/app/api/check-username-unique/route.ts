@@ -3,12 +3,18 @@ import UserModel from "@/model/User";
 import { usernameValidation } from "@/schema/signUpSchema";
 import { z } from "zod";
 
+
+// real time constant checking 
+
 const usernameQuerySchema = z.object({
     username: usernameValidation
 })
 
 export async function GET(request: Request){
 
+
+    // Next Js is updated so its not needed, 
+    // But in other framework make sure u take care of it 
     // if(request.method !== 'GET') {
     //     return Response.json(
     //         {
@@ -21,6 +27,9 @@ export async function GET(request: Request){
 
     try {
         const { searchParams } = new URL(request.url)
+
+        // localhost:3000/api/cuu?username=gaurav?phone=iPhone
+        // we want only username as query 
         const queryParam = {
             username: searchParams.get('username')
         }

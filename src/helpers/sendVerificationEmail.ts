@@ -1,7 +1,9 @@
-import { resend } from "@/lib/resend";
+import { Resend } from 'resend';
 import VerificationEmail from '../../emails/VerificationEmail';
 
 import { ApiResponse } from "@/types/ApiResponse";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendVerificationEmail(
     email: string,
@@ -10,7 +12,7 @@ export async function sendVerificationEmail(
 ): Promise<ApiResponse>{
     try {
         await resend.emails.send({
-            from: 'resend-email-onboard.com',
+            from: 'onboarding@resend.dev',
             to: email,
             subject: 'Mystery message | Verification code',
             react: VerificationEmail({username, otp: verifyCode}),
@@ -21,3 +23,31 @@ export async function sendVerificationEmail(
         return {success: false, message: "Failed to send verification email"}
     }
 }
+
+
+
+// import { Resend } from 'resend';
+// import VerificationEmail from '../../emails/VerificationEmail';
+
+
+// export async function POST() {
+
+// const resend = new Resend(process.env.RESEND_API_KEY);
+
+//   try {
+//     const { data, error } = await resend.emails.send({
+//       from: 'Acme <onboarding@resend.dev>',
+//       to: ['delivered@resend.dev'],
+//       subject: 'Hello world',
+//       react: EmailTemplate({ firstName: 'John' }),
+//     });
+
+//     if (error) {
+//       return Response.json({ error }, { status: 500 });
+//     }
+
+//     return Response.json(data);
+//   } catch (error) {
+//     return Response.json({ error }, { status: 500 });
+//   }
+// }

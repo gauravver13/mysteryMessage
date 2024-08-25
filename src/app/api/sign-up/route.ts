@@ -5,15 +5,34 @@ import bcrypt from "bcryptjs"
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 import UserModel from "@/model/User";
 
+
+// if existingUserbyEmail EXISTS THEN 
+    // if existingUserByEmail.isVerified THEN 
+    // success: false
+    // else
+    // save the updated user 
+// end 
+// if 
+// else  Create a new user with the provided details
+    // Save the new user 
+    // end if 
+
+
 export async function POST(request: Request){
-    await dbConnect()
+    await dbConnect();
+
+    // console.log('db connected');
+    
 
     try {
         const { username, email, password } = await request.json()
+        
         const existingUserVerifiedByUsername = await UserModel.findOne({
             username,
             isVerified: true 
         })
+        
+        // console.log(existingUserVerifiedByUsername);    // if null
         
 
         if(existingUserVerifiedByUsername) {
@@ -26,6 +45,8 @@ export async function POST(request: Request){
         const existingUserByEmail = await UserModel.findOne({email})
         const verifyCode = Math.floor(100000 + Math.random() * 900000).toString()
 
+        // console.log('Existing user by email: ',existingUserByEmail);
+        
         if (existingUserByEmail) {
             if (existingUserByEmail.isVerified) {
                 return Response.json({

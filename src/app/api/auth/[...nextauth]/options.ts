@@ -1,5 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+// import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
@@ -7,6 +8,21 @@ import UserModel from "@/model/User";
 
 export const authOptions: NextAuthOptions = {
     providers: [
+
+
+
+        // GoogleProvider({
+        //     clientId: process.env.GOOGLE_ID!,
+        //     clientSecret: process.env.GOOGLE_SECRET!,
+        //     authorization: {
+        //       params: {
+        //         prompt: "consent",
+        //         access_type: "offline",
+        //         response_type: "code"
+        //       }
+        //     }
+        //   }),
+
         CredentialsProvider({
             id: "credentials",
             name: "Credentials",
@@ -34,22 +50,23 @@ export const authOptions: NextAuthOptions = {
                     }
 
                     const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password)
-
                     if(isPasswordCorrect) {
                         return user
                     } else {
                     throw new Error('Incorrect Password')
                     }
+
                 } catch (err: any) {
                     throw new Error(err)
                 }
             }
         })
     ],
+
     callbacks: {
         async jwt({ token, user }) {
             if(user) {
-                token._id = user._id?.toString()
+                token._id = user._id?.toString();
                 token.isVerified = user.isVerified;
                 token.isAcceptingMessages = user.isAcceptingMessages;
                 token.username = user.username;
@@ -68,13 +85,16 @@ export const authOptions: NextAuthOptions = {
           },
 
     },
-     pages: {
+
+    pages: {
         signIn: '/sign-in'
-     },
-     session: {
+    },
+
+    session: {
         strategy: "jwt"
-     },
-     secret: process.env.NEXTAUTH_SECRET,
+    },
+
+    secret: process.env.NEXTAUTH_SECRET,
 
 }
 
