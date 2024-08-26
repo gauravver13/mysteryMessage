@@ -10,6 +10,7 @@ export async function POST(request: Request) {
 
     const session = await getServerSession(authOptions)
     const user: User = session?.user as User
+    // const user = session?.user 
 
     if(!session || !session.user){
         return Response.json(
@@ -22,7 +23,7 @@ export async function POST(request: Request) {
     }
 
     const userId = user._id;
-    const {acceptMessages} = await request.json()
+    const { acceptMessages } = await request.json()
 
     try {
         const updatedUser = await UserModel.findByIdAndUpdate(
@@ -60,6 +61,7 @@ export async function POST(request: Request) {
     }
 }
 
+
 export async function GET(request:Request) {
     await dbConnect()
 
@@ -80,7 +82,6 @@ export async function GET(request:Request) {
 
     const foundUser = await UserModel.findById(userId)
     try {
-        
             if(!foundUser){
                 return Response.json(
                     {
