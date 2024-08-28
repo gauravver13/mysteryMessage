@@ -36,7 +36,7 @@ export async function GET(request: Request){
         
         //validate with zod
         const result = usernameQuerySchema.safeParse(queryParam)
-        console.log(result)     //TODO: Remove
+        console.log('result: ',result)     //TODO: Remove
 
         if(!result.success){
             const usernameErrors = result.error.format().username?._errors || []
@@ -58,17 +58,17 @@ export async function GET(request: Request){
             return Response.json(
                 {
                     success: false,
-                    message: 'Username is already taken!'
+                    message: 'Username is already taken'
                 }, { status: 400})
         }
 
         return Response.json(
             {
                 success: true,
-                message: 'Username is unique!'
+                message: 'Username is unique'
             }, { status: 400})
     } catch (error) {
-        console.error("Error checking username", error)
+        // console.error("Error checking username", error)
         return Response.json(
             {
                 success: false,

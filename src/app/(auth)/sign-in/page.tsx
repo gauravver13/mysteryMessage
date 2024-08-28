@@ -1,8 +1,52 @@
-import React from 'react'
+'use client'
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+
+import React, { useEffect, useState } from 'react'
+import { useDebounceValue } from 'usehooks-ts'
+import { useToast } from "@/components/ui/use-toast"
+import { useRouter } from "next/navigation"
+import { signInSchema } from "@/schema/signInSchema"
+
+
+
 
 const page = () => {
+
+  const [username, setUsername] =useState('')
+  const [usernameMessage, setUsernameMessage] = useState('')
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  const debouncedUsername = useDebounceValue(username, 300)
+  const { toast } = useToast()
+  const router = useRouter()
+
+
+  // zod implementation 
+
+  // form or register || 
+  const form = useForm<z.infer<typeof signInSchema>>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      identifier: '',
+      password: ''
+    }
+  })
+
+
+  // useEffect({
+    
+  // }
+  // , [debouncedUsername])
+
+
   return (
-    <div>page</div>
+    <div>
+        Sign In Page!
+    </div>
   )
 }
 

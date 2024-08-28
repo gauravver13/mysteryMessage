@@ -12,7 +12,9 @@ import axios,{ AxiosError } from "axios";
 import { ApiResponse } from "@/types/ApiResponse"
 // import { useDebouncedCallback } from '@mantine/hooks';
 // 'usehooks-ts'
-import { useDebounceCallback } from "usehooks-ts";
+import { useDebounceCallback} from "usehooks-ts";
+
+
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -22,12 +24,13 @@ import { useRouter } from "next/navigation"
 
 
 const page = () => {
+
   const [username, setUsername] = useState('')
   const [usernameMessage, setUsernameMessage] = useState('')
   const [isCheckingUsername, setIsCheckingUsername] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   
-  const debounced = useDebounceCallback(setUsername, 300)      // check for useDebounceValue;
+  const debounced = useDebounceCallback(setUsername, 300)     // check for useDebounceValue;
   const { toast } = useToast()
   const router = useRouter();
   
@@ -49,12 +52,15 @@ const page = () => {
         setIsCheckingUsername(true)
         setUsernameMessage('')
         try {
-          const response = await axios.get(`/api/check-username-unique? username=${username}`)
 
+          const response = await axios.get(`/api/check-username-unique?username=${username}`)
+
+          // console.log('response:',response);
           console.log(response.data.message);
           
           // let message = response.data.message;
           setUsernameMessage(response.data.message)
+
         } catch (error) {
           const axiosError = error as AxiosError<ApiResponse>;
           setUsernameMessage(
@@ -65,27 +71,29 @@ const page = () => {
         }
       }
     }
+
     checkUsernameUnique()
   }, [username])
 
 
   const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
     setIsSubmitting(true)
+
     try {
-      console.log(data);
-      
+      console.log('onSubmitData: ', data);
       const response = await axios.post<ApiResponse>('/api/sign-up', data)
       toast({
         title: 'Success',
         description: response.data.message
       })
       router.replace(`/verify/${username}`)
+      // router.redirect(`/verify/${username}`)     same as above!
       setIsSubmitting(false)
     } catch (error) {
       console.error("Error in signup of user", error)
 
       const axiosError = error as  AxiosError<ApiResponse>;
-      let errorMessage = axiosError.response?.data.message
+      let errorMessage = axiosError.response?.data.message 
       toast({
         title: "Signup failed",
         description: errorMessage,
@@ -112,21 +120,24 @@ const page = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-6">
             <FormField
-            control={form.control}
             name="username"
+            control={form.control}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input placeholder="username"
+                  <Input
+                   placeholder="username"
                    {...field}
-                  onChange={(e) => {
-                    field.onChange(e)
-                    debounced(e.target.value)
+                   onChange={(e) => {
+                   field.onChange(e)
+                   debounced(e.target.value)
                   }} 
                   />
                 </FormControl>
+
                 {isCheckingUsername && <Loader2 className="animate-spin" />}
+
                 <p className={`text-sm ${usernameMessage === "Username is unique" ? 'text-green-500' : 'text-red-500'}`}>test {usernameMessage} </p>
                 <FormMessage />
               </FormItem>
@@ -162,6 +173,7 @@ const page = () => {
               </FormItem>
             )}
           />
+
           <Button type="submit" disabled={isSubmitting}>
             {
               isSubmitting ? (
@@ -172,8 +184,8 @@ const page = () => {
             }
           </Button>
           </form>
-
           </Form>
+
           <div className="text-center mt-4">
             <p>
               Already a member? {''}
