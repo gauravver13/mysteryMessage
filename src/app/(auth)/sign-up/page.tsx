@@ -12,8 +12,7 @@ import axios,{ AxiosError } from "axios";
 import { ApiResponse } from "@/types/ApiResponse"
 // import { useDebouncedCallback } from '@mantine/hooks';
 // 'usehooks-ts'
-import { useDebounceCallback} from "usehooks-ts";
-
+import { useDebounceCallback } from "usehooks-ts";
 
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -47,6 +46,7 @@ const page = () => {
   })
 
   useEffect(() => {
+
     const checkUsernameUnique = async () => {
       if (username) {
         setIsCheckingUsername(true)
@@ -54,14 +54,17 @@ const page = () => {
         try {
 
           const response = await axios.get(`/api/check-username-unique?username=${username}`)
+          
 
           // console.log('response:',response);
-          console.log(response.data.message);
+          // console.log(response.data.message);
           
           // let message = response.data.message;
           setUsernameMessage(response.data.message)
 
         } catch (error) {
+          console.log('gotcha error');
+          
           const axiosError = error as AxiosError<ApiResponse>;
           setUsernameMessage(
             axiosError.response?.data.message ?? "Error checking username"

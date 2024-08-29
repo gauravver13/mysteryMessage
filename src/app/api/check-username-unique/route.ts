@@ -30,6 +30,7 @@ export async function GET(request: Request){
 
         // localhost:3000/api/cuu?username=gaurav?phone=iPhone
         // we want only username as query 
+        
         const queryParam = {
             username: searchParams.get('username')
         }
@@ -67,6 +68,7 @@ export async function GET(request: Request){
                 success: true,
                 message: 'Username is unique'
             }, { status: 400})
+            
     } catch (error) {
         // console.error("Error checking username", error)
         return Response.json(
