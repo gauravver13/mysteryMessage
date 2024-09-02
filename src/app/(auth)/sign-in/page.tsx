@@ -4,13 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import Link from "next/link"        // Linkage!
-// import { useState } from "react"
-import { useToast } from "@/components/ui/use-toast"
-
-// import axios,{ AxiosError } from "axios";
-// import { ApiResponse } from "@/types/ApiResponse"
-
-
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -19,6 +12,7 @@ import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { signInSchema } from "@/schema/signInSchema"
 import { signIn } from "next-auth/react"
+import { useToast } from "@/components/ui/use-toast"
 
 
 const page = () => {
@@ -39,43 +33,51 @@ const page = () => {
     }
   })
 
-
-
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+
+    console.log("checking for the sigin page");
+    
 
     const result = await signIn('credentials', {
       redirect: false,
       identifier: data.identifier,
       password: data.password
-
     })
+    console.log("RESULT: ",result);
 
+    
+
+    
     if(result?.error) {
+      
       // toast({
-      //   title: "Login Failed",
-      //   description: "Incorrect username or password",
-      //   variant: "destructive"
-      // })
-      if(result.error == "CredentialSignIn") {
-        toast({
-          title: "Login Failed",
-          description: "Incorrect username or password",
-          variant: "destructive"
-        })
-      }
-    } else {
+        //   title: "Login Failed",
+        //   description: "Incorrect username or password",
+        //   variant: "destructive"
+        // })
+        
+        if(result.error === "CredentialsSignin") {
+          console.log('Login failed..!', result)
+          toast({
+            title: "Login Failed by credentials",
+            description: "Incorrect username or password",
+            variant: "destructive"
+          })
+        }
+      } else {
+      console.log(result);
       toast({
-        title: "Login Failed",
+        title: "Login Failed XXXXX",
         description: result?.error,
         variant: "destructive"
       })
     }
 
     if(result?.url) {
+      console.log("ERROR.URL", result);
+      
       router.replace('/dashboard')
     }
-
-
   }
 
   return (

@@ -1,8 +1,8 @@
-import  dbConnect from "@/lib/dbConnect";
-import bcrypt from "bcryptjs"
+// import  dbConnect from "@/lib/dbConnect";
+// import bcrypt from "bcryptjs"
 
-import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
-import UserModel from "@/model/User";
+// import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
+// import UserModel from "@/model/User";
 
 
 // take the credentials from req.body()
@@ -10,3 +10,4 @@ import UserModel from "@/model/User";
 // if exist, check for passoword validation!
 // if everything goes well check if he is verified or not!
 // all criteria above is okay then 
+
