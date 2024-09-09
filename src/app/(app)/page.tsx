@@ -19,7 +19,7 @@ import React from 'react'
 import { Mail } from "lucide-react";
 
 function Home() {
-  console.log('Hello world');
+  // console.log('Hello world');
   
   return (
     <>
